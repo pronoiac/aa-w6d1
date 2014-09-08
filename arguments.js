@@ -60,4 +60,41 @@ var curriedSum = function(numArgs){
 
 // ==== test
 var sum = curriedSum(4);
-console.log(sum(5)(30)(20)(1)); // => 56
+// console.log(sum(5)(30)(20)(1)); // => 56
+
+
+// === curry
+Function.prototype.curry = function(numArgs){
+	var items = [];
+	var that = this;
+	
+	var _curried = function(item){
+		items.push(item);
+		if (items.length === numArgs){
+			return that.apply({}, items);
+		} 
+		else {
+			// not enough items yet
+			return _curried;
+		}
+	}
+	// keep going
+	return _curried;
+}
+
+// test for curry 
+function sumThree(num1, num2, num3) {
+  return num1 + num2 + num3;
+}
+
+// console.log(sumThree.apply({},[4, 20, 6]));// == 30
+
+// you'll write `Function#curry`!
+var f1 = sumThree.curry(3);
+var f2 = f1(4);
+var f3 = f2(20);
+var result = f3(6); // = 30
+console.log(result);
+
+// or more briefly:
+console.log(sumThree.curry(3)(4)(20)(6)); // == 30
